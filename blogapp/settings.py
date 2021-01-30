@@ -35,11 +35,6 @@ SECRET_KEY = 'vdw!-7m^j3zkqfy@1rp8yt0maqhd4*r+h^vq10x4bh@js0ik*_'
 DEBUG = True
 
 ALLOWED_HOSTS = ['https://blog100120.herokuapp.com/','127.0.0.1']
-MIDDLEWARE_CLASSES = [
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    ]
 
 # Application definition
 
@@ -97,7 +92,7 @@ WSGI_APPLICATION = 'blogapp.wsgi.application'
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -132,18 +127,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-MEDIA_URL='/media/'
-# Activate Django-Heroku.
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(PROJECT_ROOT,'media')
+
+# Activate Django-Heroku.
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR,'blogapp/static/'),
 )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 django_heroku.settings(locals())
 # This is new
 options = DATABASES['default'].get('OPTIONS', {})
 options.pop('sslmode', None)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
