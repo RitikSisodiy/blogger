@@ -12,16 +12,16 @@ def index(request, num=1):
 	if request.method == "POST":
 		userid = request.user.id
 		blogid = request.POST['blogid'][4:]
-		a = like.objects.filter(userid = userid, blogid= blogid)
+		a = like.objects.filter(user = userid, blog= blogid)
 		if(len(a)>0):
-			Like = like.objects.get(userid = userid, blogid= blogid)
+			Like = like.objects.get(user = userid, blog= blogid)
 			Like.delete()
 			status = 'disliked'
 		else:
-			Like = like(blogid= blogid,userid = userid)
+			Like = like(blog= blogid,user = userid)
 			Like.save()
 			status = 'liked'
-		likes = len(like.objects.filter(blogid = blogid))
+		likes = len(like.objects.filter(blog = blogid))
 		res = json.dumps({'likes':likes,'blogid':request.POST['blogid'],'status':status})
 		return HttpResponse(res)
 	print(num)
@@ -29,10 +29,10 @@ def index(request, num=1):
 	allblog =  blog.objects.all()[((3*num)-3):(3*num)]
 	a = []
 	for item in allblog:
-		b = like.objects.filter(blogid=item.id)
+		b = like.objects.filter(blog=item.id)
 		likes={'total':len(b),'byuser':'disliked'}
 		if len(b)>0:
-			c = like.objects.filter(blogid=item.id,userid=request.user.id)
+			c = like.objects.filter(blog=item.id,user=request.user.id)
 			if len(c)>0:
 				likes['byuser']= 'liked'
 		a.append([item,likes])
@@ -132,13 +132,13 @@ def post(request,num=1):
 	if request.method=='POST':
 		com = request.POST['comment']
 		userid = request.user.id
-		Comment = comment(blogid= num,userid= request.user.id,comment=com)
+		Comment = comment(blog= num,user= request.user.id,comment=com)
 		Comment.save()
 		date = str(datetime.date.today())
 		return HttpResponse(json.dumps({'comment': com , 'date': date }))
 	Blog = blog.objects.get(id=num)
 	comlike = []
-	com = comment.objects.filter(blogid=num)
+	com = comment.objects.filter(blog=num)
 	for c in com:
 		user = User.objects.get(id=c.userid)
 		comlike.append([c,user.first_name+' '+user.last_name,])
