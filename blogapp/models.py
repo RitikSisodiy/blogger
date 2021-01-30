@@ -10,8 +10,8 @@ class blog(models.Model):
     blog_image = models.ImageField(upload_to = 'blog/images', default= "")
 class like(models.Model):
 	"""docstring for likecomment"""
-	blog = models.CharField(max_length=50,primary_key=False)
-	user = models.CharField(max_length=50,primary_key=False)
+	blogid = models.CharField(max_length=50,primary_key=False)
+	userid = models.CharField(max_length=50,primary_key=False)
 class comment(models.Model):
 	"""docstring for likecomment"""
 	blogid = models.CharField(max_length=50,primary_key=False)
