@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from .models import blog,like,otp,comment
+from .models import blog,otp,comment
 from math import ceil
 import json
 from django.contrib import messages
